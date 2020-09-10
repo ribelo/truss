@@ -16,28 +16,28 @@
   []
 
   :plugins
-  [[lein-pprint  "1.2.0"]
+  [[lein-pprint  "1.3.2"]
    [lein-ancient "0.6.15"]
-   [lein-codox   "0.10.6"]]
+   [lein-codox   "0.10.7"]]
 
   :profiles
   {;; :default [:base :system :user :provided :dev]
    :server-jvm {:jvm-opts ^:replace ["-server"]}
    :provided {:dependencies [[org.clojure/clojure       "1.5.1"]
-                             [org.clojure/clojurescript "1.10.520"]]}
+                             [org.clojure/clojurescript "1.10.773"]]}
    :1.5  {:dependencies [[org.clojure/clojure "1.5.1"]]}
    :1.6  {:dependencies [[org.clojure/clojure "1.6.0"]]}
    :1.7  {:dependencies [[org.clojure/clojure "1.7.0"]]}
    :1.8  {:dependencies [[org.clojure/clojure "1.8.0"]]}
    :1.9  {:dependencies [[org.clojure/clojure "1.9.0"]]}
    :1.10 {:dependencies [[org.clojure/clojure "1.10.0"]]}
-   :test {:dependencies [[org.clojure/test.check "0.9.0"]]}
+   :test {:dependencies [[org.clojure/test.check "1.1.0"]]}
    :dev
    [:1.10 :test :server-jvm
     {:plugins
      [;; These must be in :dev, Ref. https://github.com/lynaghk/cljx/issues/47:
       [com.keminglabs/cljx "0.6.0"]
-      [lein-cljsbuild      "1.1.7"]]}]}
+      [lein-cljsbuild      "1.1.8"]]}]}
 
   ;; :jar-exclusions [#"\.cljx|\.DS_Store"]
 
