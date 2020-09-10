@@ -47,15 +47,12 @@
      {:inline (fn [x] `(if (identical? ~x nil) false true))}
      [x] (if (identical? x nil) false true)))
 
-(compile-if (completing (fn [])) ; Clojure 1.7+
-  (def  set* set)
-  (defn set* [x] (if (set? x) x (set x))))
-
-(do
-  (defn #?(:clj ks=      :cljs ^boolean ks=)      [ks m] (=             (set (keys m)) (set* ks)))
-  (defn #?(:clj ks<=     :cljs ^boolean ks<=)     [ks m] (set/subset?   (set (keys m)) (set* ks)))
-  (defn #?(:clj ks>=     :cljs ^boolean ks>=)     [ks m] (set/superset? (set (keys m)) (set* ks)))
-  (defn #?(:clj ks-nnil? :cljs ^boolean ks-nnil?) [ks m] (revery?     #(some? (get m %))     ks)))
+(defn ensure-set [x] (if (set? x) x (set x)))
+(let [ensure-set ensure-set]
+  (defn #?(:clj ks=      :cljs ^boolean ks=)      [ks m] (=             (set (keys m)) (ensure-set ks)))
+  (defn #?(:clj ks<=     :cljs ^boolean ks<=)     [ks m] (set/subset?   (set (keys m)) (ensure-set ks)))
+  (defn #?(:clj ks>=     :cljs ^boolean ks>=)     [ks m] (set/superset? (set (keys m)) (ensure-set ks)))
+  (defn #?(:clj ks-nnil? :cljs ^boolean ks-nnil?) [ks m] (revery?     #(some? (get m %))           ks)))
 
 ;;;; Truss
 
@@ -90,15 +87,15 @@
     (let [[type a1 a2 a3] pred]
       (assert a1 "Special predicate [<special-type> <arg>] form w/o <arg>")
       (case type
-        :set=             [`(fn [~'x] (=             (set* ~'x) (set* ~a1))) false]
-        :set<=            [`(fn [~'x] (set/subset?   (set* ~'x) (set* ~a1))) false]
-        :set>=            [`(fn [~'x] (set/superset? (set* ~'x) (set* ~a1))) false]
+        :set=             [`(fn [~'x] (=             (ensure-set ~'x) (ensure-set ~a1))) false]
+        :set<=            [`(fn [~'x] (set/subset?   (ensure-set ~'x) (ensure-set ~a1))) false]
+        :set>=            [`(fn [~'x] (set/superset? (ensure-set ~'x) (ensure-set ~a1))) false]
         :ks=              [`(fn [~'x] (ks=      ~a1 ~'x)) false]
         :ks<=             [`(fn [~'x] (ks<=     ~a1 ~'x)) false]
         :ks>=             [`(fn [~'x] (ks>=     ~a1 ~'x)) false]
         :ks-nnil?         [`(fn [~'x] (ks-nnil? ~a1 ~'x)) false]
-        (    :el     :in) [`(fn [~'x]      (contains? (set* ~a1) ~'x))  false]
-        (:not-el :not-in) [`(fn [~'x] (not (contains? (set* ~a1) ~'x))) false]
+        (    :el     :in) [`(fn [~'x]      (contains? (ensure-set ~a1) ~'x))  false]
+        (:not-el :not-in) [`(fn [~'x] (not (contains? (ensure-set ~a1) ~'x))) false]
 
         :n=               [`(fn [~'x] (=  (count ~'x) ~a1)) false]
         :n>=              [`(fn [~'x] (>= (count ~'x) ~a1)) false]
