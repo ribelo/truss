@@ -9,9 +9,7 @@
 
 > See [here](https://taoensso.com/clojure/backers) if you're interested in helping support my open-source work, thanks! - Peter Taoussanis
 
-# Truss
-
-### Great Clojure/Script error messages where you need them most
+# Truss: great Clojure/Script error messages where you need them most
 
 **Or**: A **lightweight** alternative to **static typing**, [clojure.spec], [core.typed], [@plumatic/schema], etc.
 
@@ -55,7 +53,8 @@ The best general recommendation I can make is to try actually experiment with th
 Add the necessary dependency to your project:
 
 ```clojure
-[com.taoensso/truss "1.6.0"]
+Leiningen: [com.taoensso/truss "1.6.0"] ; or
+deps.edn:   com.taoensso/truss {:mvn/version "1.6.0"}
 ```
 
 And setup your namespace imports:
